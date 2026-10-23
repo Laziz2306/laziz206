@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elektron Kutubxona</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #222;
+            transition: 0.3s;
+        }
+
+        header {
+            background: linear-gradient(135deg, #243b55, #141e30);
+            color: white;
+            padding: 25px;
+        }
+
+        .header-content {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+        }
+
+        header p {
+            margin: 0;
+        }
+
+        #themeButton {
+            background: white;
+            color: #243b55;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .form-box,
+        .books {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        select {
+            background: white;
+            cursor: pointer;
+        }
+
+        .add-btn {
+            background: #243b55;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .add-btn:hover {
+            background: #141e30;
+        }
+
+        .filter-box {
+            display: grid;
+            grid-template-columns: 1fr 220px;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .filter-box input,
+        .filter-box select {
+            margin-bottom: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #243b55;
+            color: white;
+        }
+
+        td img {
+            width: 60px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .edit-btn {
+            background: #ffc107;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            margin: 3px;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            margin: 3px;
+        }
+
+        .favorite-btn {
+            border: none;
+            background: transparent;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        .read-btn {
+            border: none;
+            padding: 8px 12px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .read {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .unread {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .stat-icon {
+            font-size: 32px;
+        }
+
+        .stat-card h3 {
+            font-size: 26px;
+            margin: 0 0 5px;
+        }
+
+        .stat-card p {
+            color: #666;
+            margin: 0;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+
+        body.dark-mode {
+            background: #121826;
+            color: #eeeeee;
+        }
+
+        body.dark-mode .form-box,
+        body.dark-mode .books,
+        body.dark-mode .stat-card {
+            background: #1e293b;
+            color: #eeeeee;
+        }
+
+        body.dark-mode input,
+        body.dark-mode select {
+            background: #334155;
+            color: white;
+            border-color: #475569;
+        }
+
+        body.dark-mode input::placeholder {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode select option {
+            background: #334155;
+            color: white;
+        }
+
+        body.dark-mode th {
+            background: #0f172a;
+        }
+
+        body.dark-mode td {
+            border-color: #475569;
+        }
+
+        body.dark-mode #themeButton {
+            background: #334155;
+            color: white;
+        }
+
+        body.dark-mode .stat-card p,
+        body.dark-mode .empty {
+            color: #cbd5e1;
+        }
+
+        @media (max-width: 800px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .filter-box {
+                grid-template-columns: 1fr;
+            }
+            table {
+                font-size: 13px;
+            }
+            th, td {
+                padding: 7px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            .form-box, .books {
+                padding: 15px;
+                overflow-x: auto;
+            }
+            table {
+                min-width: 900px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <div>
+            <h1>📚 Elektron Kutubxona</h1>
+            <p>Kitoblaringizni qulay boshqaring</p>
+        </div>
+        <button id="themeButton" onclick="toggleDarkMode()">
+            🌙 Tungi rejim
+        </button>
+    </div>
+</header>
+
+<div class="container">
+
+    <!-- STATISTIKA -->
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-icon">📚</div>
+            <div>
+                <h3 id="totalBooks">0</h3>
+                <p>Jami kitoblar</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📖</div>
+            <div>
+                <h3 id="romanBooks">0</h3>
+                <p>Romanlar</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📝</div>
+            <div>
+                <h3 id="dostonBooks">0</h3>
+                <p>Dostonlar</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📕</div>
+            <div>
+                <h3 id="otherBooks">0</h3>
+                <p>Boshqa</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- KITOB QO‘SHISH -->
+    <div class="form-box">
+        <h2>➕ Yangi kitob qo‘shish (Admin uchun)</h2>
+        <input type="text" id="bookName" placeholder="Kitob nomi">
+        <input type="text" id="author" placeholder="Muallif">
+        <select id="genre">
+            <option value="">Janrni tanlang</option>
+            <option value="Roman">Roman</option>
+            <option value="Doston">Doston</option>
+            <option value="Hikoya">Hikoya</option>
+            <option value="Qissa">Qissa</option>
+            <option value="She'r">She'r</option>
+            <option value="Ilmiy">Ilmiy</option>
+            <option value="Boshqa">Boshqa</option>
+        </select>
+        <input type="file" id="image" accept="image/*">
+        <button class="add-btn" onclick="checkAdminAndAddBook()">
+            📚 Kitob qo‘shish
+        </button>
+    </div>
+
+    <!-- KITOBLAR -->
+    <div class="books">
+        <h2>📚 Kitoblar ro‘yxati</h2>
+
+        <div class="filter-box">
+            <input type="text" id="searchBook" placeholder="🔍 Kitob nomi, muallif yoki janrni qidiring..." oninput="displayBooks()">
+            <select id="genreFilter" onchange="displayBooks()">
+                <option value="all">📚 Barcha janrlar</option>
+                <option value="Roman">📖 Roman</option>
+                <option value="Doston">📝 Doston</option>
+                <option value="Hikoya">📕 Hikoya</option>
+                <option value="Qissa">📗 Qissa</option>
+                <option value="She'r">📘 She'r</option>
+                <option value="Ilmiy">🎓 Ilmiy</option>
+                <option value="Boshqa">📚 Boshqa</option>
+            </select>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Kitob nomi</th>
+                    <th>Muallif</th>
+                    <th>Janr</th>
+                    <th>Rasm</th>
+                    <th>Holat</th>
+                    <th>Sevimli</th>
+                    <th>Amal</th>
+                </tr>
+            </thead>
+            <tbody id="bookList"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    let books = JSON.parse(localStorage.getItem("books")) || [];
+
+    // Admin paroli (O'zingiz xohlagan parolga o'zgartirishingiz mumkin)
+    const ADMIN_PASSWORD = "12345";
+
+    // Admin parolini tekshirish va kitob qo'shish
+    function checkAdminAndAddBook() {
+        let password = prompt("Kitob qo'shish uchun admin parolini kiriting:");
+        if (password === null) return;
+        
+        if (password !== ADMIN_PASSWORD) {
+            alert("❌ Xato parol! Sizda kitob qo'shish huquqi yo'q.");
+            return;
+        }
+
+        addBook();
+    }
+
+    function addBook() {
+        let bookName = document.getElementById("bookName").value.trim();
+        let author = document.getElementById("author").value.trim();
+        let genre = document.getElementById("genre").value;
+        let imageFile = document.getElementById("image").files[0];
+
+        if (bookName === "" || author === "" || genre === "") {
+            alert("Iltimos, barcha joylarni to'ldiring!");
+            return;
+        }
+
+        if (!imageFile) {
+            alert("Iltimos, kitob rasmini tanlang!");
+            return;
+        }
+
+        let reader = new FileReader();
+        reader.onload = function(event) {
+            books.push({
+                name: bookName,
+                author: author,
+                genre: genre,
+                image: event.target.result,
+                read: false,
+                favorite: false
+            });
+
+            saveBooks();
+            document.getElementById("bookName").value = "";
+            document.getElementById("author").value = "";
+            document.getElementById("genre").value = "";
+            document.getElementById("image").value = "";
+            displayBooks();
+            alert("✅ Kitob muvaffaqiyatli qo'shildi!");
+        };
+
+        reader.readAsDataURL(imageFile);
+    }
+
+    function saveBooks() {
+        localStorage.setItem("books", JSON.stringify(books));
+    }
+
+    function displayBooks() {
+        let list = document.getElementById("bookList");
+        let searchText = document.getElementById("searchBook").value.toLowerCase().trim();
+        let selectedGenre = document.getElementById("genreFilter").value;
+
+        list.innerHTML = "";
+        let found = 0;
+
+        books.forEach(function(book, index) {
+            if (book.read === undefined) book.read = false;
+            if (book.favorite === undefined) book.favorite = false;
+            if (!book.image) book.image = "https://via.placeholder.com/60x80?text=Kitob";
+
+            let name = String(book.name).toLowerCase();
+            let author = String(book.author).toLowerCase();
+            let genre = String(book.genre).toLowerCase();
+
+            let searchMatch = name.includes(searchText) || author.includes(searchText) || genre.includes(searchText);
+            let genreMatch = selectedGenre === "all" || genre === selectedGenre.toLowerCase();
+
+            if (searchMatch && genreMatch) {
+                found++;
+                list.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${book.name}</td>
+                        <td>${book.author}</td>
+                        <td>${book.genre}</td>
+                        <td><img src="${book.image}" alt="Kitob rasmi"></td>
+                        <td>
+                            <button class="read-btn ${book.read ? "read" : "unread"}" onclick="toggleRead(${index})">
+                                ${book.read ? "🟢 O‘qildi" : "🟡 O‘qilmagan"}
+                            </button>
+                        </td>
+                        <td>
+                            <button class="favorite-btn" onclick="toggleFavorite(${index})">
+                                ${book.favorite ? "⭐" : "☆"}
+                            </button>
+                        </td>
+                        <td>
+                            <button class="edit-btn" onclick="editBook(${index})">✏️ Tahrirlash</button>
+                            <button class="delete-btn" onclick="deleteBook(${index})">🗑️ O‘chirish</button>
+                        </td>
+                    </tr>
+                `;
+            }
+        });
+
+        if (found === 0) {
+            list.innerHTML = `<tr><td colspan="8" class="empty">📚 Kitob topilmadi</td></tr>`;
+        }
+
+        updateStatistics();
+    }
+
+    function toggleRead(index) {
+        books[index].read = !books[index].read;
+        saveBooks();
+        displayBooks();
+    }
+
+    function toggleFavorite(index) {
+        books[index].favorite = !books[index].favorite;
+        saveBooks();
+        displayBooks();
+    }
+
+    function editBook(index) {
+        let password = prompt("Tahrirlash uchun admin parolini kiriting:");
+        if (password !== ADMIN_PASSWORD) {
+            alert("❌ Xato parol!");
+            return;
+        }
+
+        let book = books[index];
+        let newName = prompt("Kitob nomini kiriting:", book.name);
+        if (newName === null) return;
+        let newAuthor = prompt("Muallifni kiriting:", book.author);
+        if (newAuthor === null) return;
+        let newGenre = prompt("Janrni kiriting:", book.genre);
+        if (newGenre === null) return;
+
+        books[index] = {
+            name: newName.trim(),
+            author: newAuthor.trim(),
+            genre: newGenre.trim(),
+            image: book.image,
+            read: book.read,
+            favorite: book.favorite
+        };
+
+        saveBooks();
+        displayBooks();
+    }
+
+    function deleteBook(index) {
+        let password = prompt("O'chirish uchun admin parolini kiriting:");
+        if (password !== ADMIN_PASSWORD) {
+            alert("❌ Xato parol!");
+            return;
+        }
+
+        if (confirm("Bu kitobni o'chirmoqchimisiz?")) {
+            books.splice(index, 1);
+            saveBooks();
+            displayBooks();
+        }
+    }
+
+    function updateStatistics() {
+        let total = books.length;
+        let roman = books.filter(b => String(b.genre).toLowerCase() === "roman").length;
+        let doston = books.filter(b => String(b.genre).toLowerCase() === "doston").length;
+        let other = total - roman - doston;
+
+        document.getElementById("totalBooks").textContent = total;
+        document.getElementById("romanBooks").textContent = roman;
+        document.getElementById("dostonBooks").textContent = doston;
+        document.getElementById("otherBooks").textContent = other;
+    }
+
+    function toggleDarkMode() {
+        document.body.classList.toggle("dark-mode");
+        let isDark = document.body.classList.contains("dark-mode");
+        localStorage.setItem("darkMode", isDark);
+        updateThemeButton();
+    }
+
+    function updateThemeButton() {
+        let button = document.getElementById("themeButton");
+        let isDark = document.body.classList.contains("dark-mode");
+        button.innerHTML = isDark ? "☀️ Kunduzgi rejim" : "🌙 Tungi rejim";
+    }
+
+    if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark-mode");
+    }
+
+    updateThemeButton();
+    displayBooks();
+</script>
+
+</body>
+</html>
